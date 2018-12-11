@@ -7,6 +7,8 @@ The goal of this project is to create a more interactive user experience for rec
 ## Instructions
 Clone this repository by running `git clone https://github.com/the-shimale/feedme`
 
+Note: you must have Node.js installed in order to run this web application. You can download the necessary version [here](https://nodejs.org/en/download/).
+
 Open a bash shell and navigate to the project directory `feedme` and run the `npm install` command to download necessary dependecies
 
 Run `npm run start` to start the web application
