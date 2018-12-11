@@ -1,0 +1,23 @@
+{
+  "name": "feedme",
+  "version": "1.0.0",
+  "description": "CS 4287 Cloud Project",
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "serve-favicon": "^2.5.0"
+  },
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "author": "Able Shi",
+  "license": "ISC",
+  "devDependencies": {
+    "prettier": "^1.14.3",
+    "puppeteer": "^1.9.0",
+    "should": "^13.2.3",
+    "superagent": "^4.0.0-beta.5"
+  }
+}
