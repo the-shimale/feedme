@@ -11,11 +11,21 @@ const csv = require('csvtojson');
 let names_business = require('./data/names_business.json');
 // let business_names = require('./data/business_names.json');
 let user_reviews = require('./data/reviewsByUser.json');
+let user_trained = require('./data/convertTrainUsers.json');
+let business_trained = require('./data/convertTrainBusinesses.json');
 
 const AWS = require('aws-sdk');
-AWS.config.update({region:'us-east-2'});
+AWS.config.region = 'us-east-2';
+AWS.config.loadFromPath('./data/rootkey.json');
+// AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+//   IdentityId: 'us-east-2:09e2177a-e9c3-4095-b2fc-8e97f5a1eb08'
+// });
+// AWS.config.credentials.get(function(err) {
+//   if (err) console.log(err);
+//   else console.log(AWS.config.credentials);
+// });
+// AWS.config.update({region:'us-east-2'});
 let sagemakerruntime = new AWS.SageMakerRuntime();
-// let sagemaker = new AWS.SageMaker({apiVersion: '2017-07-24'});
 
 let port = process.env.PORT ? process.env.PORT : 8080;
 let env = process.env.NODE_ENV ? process.env.NODE_ENV : "dev";
@@ -46,6 +56,15 @@ let env = process.env.NODE_ENV ? process.env.NODE_ENV : "dev";
 // 	    }
 // 	});
 
+/**********************************************************************************************************/
+
+// create request payload for sagemaker endpoint
+  let dataElement = [];
+  // initialize dataElement vector to all 0's
+  for (let i = 0; i < 247848; ++i) {
+  	dataElement.push(0);
+  };
+
 
 /**********************************************************************************************************/
 
@@ -57,24 +76,37 @@ app.use(bodyParser.urlencoded({ extended: true }));
 /**********************************************************************************************************/
 
 // example call to Sagemaker endpoint
-// console.log(names_business);
 
-app.post("/someendpoint", (req, res) => {
-	// console.log(req.body.restaurantName.toString().toLowerCase());
-	// console.log(names_business['american cafe']);
-	let name = req.body.restaurantName.toLowerCase();
-	// console.log(names_business[name]);
-
+// user inputs user_id, business name
+// lookup business_id
+// use user_id, business_id to lookup unique INT in magic.json
+// genereate array of ints for 
+// use unique INT to find 
+app.post("/endpoint", (req, res) => {
 	let businessId = names_business[req.body.restaurantName.toLowerCase()];
-	console.log(businessId);
+
+	let userIndex = user_trained[req.body.username];
+	let businessIndex = business_trained[businessId];
+
+	// update dataElement at indecies 
+	dataElement[userIndex] = 1;
+	dataElement[businessIndex] = 1;
+
+	let request = {
+    	"instances": [
+	    	{ "features": dataElement }
+	  	]
+	};
+	let instances =	[{ "features": dataElement }];
 
 	let params = {
-		Body: businessId,
-		EndpointName: '<SageMaker EndpointName>'
+		Body: Buffer.from(JSON.stringify(request)),
+		EndpointName: 'factorization-machines-2018-12-14-06-45-48-339',
+		ContentType: 'application/json'
 	};
 	sagemakerruntime.invokeEndpoint(params, function (err, data) {
 	  if (err) console.log(err, err.stack); // an error occurred
-	  else     console.log(data);           // successful response
+	  else     res.status(200).send(JSON.parse(Buffer.from(data.Body).toString('utf8')));           // successful response
 	});
 });
 

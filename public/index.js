@@ -37,16 +37,25 @@ const onLookup = event => {
 const onRegister = event => {
   event.preventDefault();
   let $error = $("#errorMsg");
+  let $recommend = $('#recommendMsg');
+  let $reject = $('#rejectMsg');
   const data = {
-  	restaurantName: document.getElementById("inputRestaurantName").value
-  };
-  let SagemakerEndPoint = ''; // we define the AWS Sagemaker endpoint name
+  	restaurantName: document.getElementById("inputRestaurantName").value,
+  	username: document.getElementById("inputUsername").value
+  }
+
    $.ajax({
-      // url: `/endpoints/${SagemakerEndPoint}/invocations`,
-      url: `someendpoint`,
+      url: `/endpoint`,
+      // url: `someendpoint`,
       method: "post",
       data: data,
       success: data => {
+      	// data received from server
+      	if (data.predictions[0].predicted_label > 0) {
+      		$recommend.html(`Yes! Our model recommends this restaurant.`);
+      	} else {
+      		$reject.html(`No! Our model does not recommend this restaurant.`);
+      	}
       	console.log(data);
       },
       error: err => {
