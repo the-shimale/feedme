@@ -1,0 +1,24 @@
+.category-buttons {
+    display: inline-block;
+}
+
+input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    & + label {
+        display: block;
+        padding: .4em .8em;
+        line-height: 1;
+        color: #fff;
+        background-color: #444;
+        &:hover, &:focus, &:active {
+            background-color: #DDE3ED;
+            color:  #333;
+        }
+    }
+    &:checked + label {
+        background-color: #DDE3ED;
+        color:  #333;
+        &:hover, &:focus, &:active { background-color: #eee; }
+    } 
+}
