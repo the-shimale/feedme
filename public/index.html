@@ -25,70 +25,29 @@
     <div class="col-sm-8 offset-sm-2">
         <form class="form-horizontal" action="/register" method="post">
           <div class="form-group">
+            <label for="inputUsername">User</label>
+            <input type="text" class="form-control" id="inputUsername" placeholder="">
+          </div>
+            <div class="form-group row">
+                <div class="offset-sm-5 col-sm-9">
+                    <button id="lookupBtn" class="btn btn-secondary" type="lookup">Lookup User</button>
+                </div>
+            </div>
+          <div class="form-group">
+            <label for="inputUsername">User Reviews</label>
+            <table id="reviewTable" class="col-sm-12 table">
+                <thead>
+                <tr>
+                    <th>Restaurant</th>
+                    <th>Rating</th>
+                </tr>
+                </thead>
+                <tbody id="reviews"></tbody>
+            </table>          </div>
+          <div class="form-group">
             <label for="inputRestaurantName">Restaurant</label>
             <input type="text" class="form-control" id="inputRestaurantName" placeholder="">
           </div>
-          <div class="form-group">
-            <label for="inputAddress">Address</label>
-            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-          </div>
-          <div class="form-group">
-            <label for="inputAddress2">Address 2</label>
-            <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="inputCity">City</label>
-              <input type="text" class="form-control" id="inputCity">
-            </div>
-            <div class="form-group col-md-4">
-              <label for="inputState">State</label>
-              <input type="text" class="form-control" id="inputState">
-            </div>
-            <div class="form-group col-md-2">
-              <label for="inputZip">Zip</label>
-              <input type="text" class="form-control" id="inputZip">
-            </div>
-          </div>
-            <div class="form-group row">
-                <label class="col-sm-3 col-form-label" for="price">Price:</label>
-                <div class="col-sm-9">
-                    <input class="form-control" id="price" type="text" placeholder="Ex. '$$'">
-                </div>
-            </div>
-                <div class="form-row">
-                <label class="col-sm-3 col-form-label" for="rating">Rating:</label>
-
-                <div class="form-group col-sm-1">
-                  <label for="ratingLow">From</label>
-                  <input type="text" class="form-control" id="ratingLow" value="1">
-                </div>
-                <div class="form-group col-sm-1">
-                  <label for="ratingHigh">To</label>
-                  <input type="text" class="form-control" id="ratingHigh" value="5">
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-sm-3 col-form-label">
-                    <div class="btn-group" role="group" id="categories">
-<!--                       <button type="button" class="btn btn-secondary">Food</button>
- -->                    </div>
-                </div>
-            </div>
-<!--             <div class="form-group row category-buttons">
-                <div>
-                    <input type="checkbox" name="input-filter-height[1]" id="input-filter-height[1]">
-                    <label for="input-filter-height[1]">Option 1</label>
-                </div>
-                <div>
-                    <input type="checkbox" checked name="input-filter-height[2]" id="input-filter-height[2]">
-                    <label for="input-filter-height[2]">Option 2</label>
-                </div>
-                <div>
-                    <input type="checkbox" name="input-filter-height[3]" id="input-filter-height[3]">
-                    <label for="input-filter-height[3]">Option 3</label>
-                </div>
-            </div> -->
             <div class="form-group row">
                 <div class="offset-sm-5 col-sm-9">
                     <button id="submitBtn" class="btn btn-danger" type="submit">Submit</button>

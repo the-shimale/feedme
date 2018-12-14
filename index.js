@@ -2,17 +2,17 @@
 
 let path = require("path"),
     express = require("express"),
-    bodyParser = require("body-parser");
+    bodyParser = require("body-parser"),
+    fs = require('file-system');
     // logger = require("morgan"),
     // _ = require("underscore");
 
-const yelp = require('yelp-fusion');
-const AWS = require('aws-sdk');
-
 const csv = require('csvtojson');
-let fs = require('file-system');
 let names_business = require('./data/names_business.json');
+// let business_names = require('./data/business_names.json');
+let user_reviews = require('./data/reviewsByUser.json');
 
+const AWS = require('aws-sdk');
 AWS.config.update({region:'us-east-2'});
 let sagemakerruntime = new AWS.SageMakerRuntime();
 // let sagemaker = new AWS.SageMaker({apiVersion: '2017-07-24'});
@@ -21,11 +21,9 @@ let port = process.env.PORT ? process.env.PORT : 8080;
 let env = process.env.NODE_ENV ? process.env.NODE_ENV : "dev";
 
 /**********************************************************************************************************/
-
-// parse business_names.csv
+ // parse business_names.csv
 // let csvFilePath = 'data/business_names.csv';
-
-// csv()
+//  csv()
 // .fromFile(csvFilePath)
 // .then((jsonObj)=>{
 //     console.log(jsonObj);
@@ -35,23 +33,18 @@ let env = process.env.NODE_ENV ? process.env.NODE_ENV : "dev";
 // 	        console.log(err);
 // 	    }
 // 	});
-// })
+// });
+
 // let parsedJson = {}
 // business_names.forEach(elem => {
 // 	parsedJson[elem.name.toLowerCase()] = elem.business_id;
 // });
-
-// 	let jsonData = JSON.stringify(parsedJson);
+//  	let jsonData = JSON.stringify(parsedJson);
 //     fs.writeFile("data/names_business.json", jsonData, function(err) {
 // 	    if (err) {
 // 	        console.log(err);
 // 	    }
 // 	});
-/**********************************************************************************************************/
-
-// yelp api calls
-// const yelpApiKey = 'lBvA1kKyaarH6TEZ85eUgdzBFo1JSypprcLSYS3RrKdJhA9Ql7QFRnK8Nv_OUj8GVownn-K3TAM-UA872KLfEHPfIGWjuzsWaqhQirWzM-Jk6bflIUuzUyTf3bb3WXYx';
-// const yelpClient = yelp.client(yelpApiKey);
 
 
 /**********************************************************************************************************/
@@ -76,7 +69,7 @@ app.post("/someendpoint", (req, res) => {
 	console.log(businessId);
 
 	let params = {
-		'Body': businessId,
+		Body: businessId,
 		EndpointName: '<SageMaker EndpointName>'
 	};
 	sagemakerruntime.invokeEndpoint(params, function (err, data) {
@@ -84,6 +77,19 @@ app.post("/someendpoint", (req, res) => {
 	  else     console.log(data);           // successful response
 	});
 });
+
+
+// get call to receive user reviews
+app.get("/v1/user/:username", (req, res) => {
+	let username = req.params.username;
+	let reviewArray = user_reviews[username];
+	if (reviewArray) {
+		res.status(200).send(reviewArray);
+	} else {
+		res.status(404).send({ error: "unknown user" });
+	}
+});
+
 
 /**********************************************************************************************************/
 
