@@ -2,3 +2,4 @@ node_modules/*
 .idea/*
 public/js/main.*
 public/js/vendor.*
+data/rootkey.*
